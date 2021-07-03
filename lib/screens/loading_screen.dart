@@ -7,6 +7,13 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  @override
+  void initState() {
+    //initState only gets called once and that's when it's rendered to the screen
+    super.initState();
+    getLocation();
+  }
+
   void getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
@@ -15,7 +22,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getLocation();
+    // build gets called everytime something gets changed so better to put
+    // get location in init as it uses less resources/ phone battery cos its
+    // not called over and over again!
     return Scaffold();
   }
 }
