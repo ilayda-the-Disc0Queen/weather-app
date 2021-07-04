@@ -27,9 +27,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
       var decodedData = jsonDecode(
           data); // because jsonDecode(data)'s type is dynamic we leave it as var which is for dynamic things
-      var temperature = decodedData['main']['temp'];
-      var condition = decodedData['weather'][0]['id'];
-      var cityName = decodedData['name'];
+      double temperature = decodedData['main']['temp'];
+      int condition = decodedData['weather'][0]['id'];
+      String cityName = decodedData['name'];
 
       print('Temperature = $temperature');
       print('Condition = $condition');
