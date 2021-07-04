@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../services/location.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -16,10 +19,21 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getData() async {
-    http.Response response = await http.get(api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid={API key});
+    String apiKey = dotenv.env['OPEN_WEATHER_API_KEY'];
+    http.Response response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid=$apiKey'));
     if (response.statusCode == 200) {
       String data = response.body;
-      print(data);
+
+      var decodedData = jsonDecode(
+          data); // because jsonDecode(data)'s type is dynamic we leave it as var which is for dynamic things
+      var temperature = decodedData['main']['temp'];
+      var condition = decodedData['weather'][0]['id'];
+      var cityName = decodedData['name'];
+
+      print('Temperature = $temperature');
+      print('Condition = $condition');
+      print('city = $cityName');
     } else {
       print(response.statusCode);
     }
@@ -30,7 +44,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
     await location.getCurrentLocation();
     // ⬆ we need to wait for line 20 (add await keyword) to complete before we use it, so we need to make the function we're waiting for (getCurrentLocation) a Future fn
     print("LATITUDE: ${location.latitude}");
-    print(location.longitude);
+    print("LONGITUDE: ${location.longitude}");
+    getData();
   }
 
   @override
