@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import '../services/location.dart';
+import 'package:http/http.dart' as http;
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -14,10 +15,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
     getLocation();
   }
 
+  void getData() async {
+    http.Response response = await http.get(api.openweathermap.org/data/2.5/weather?lat=35&lon=139&appid={API key});
+    if (response.statusCode == 200) {
+      String data = response.body;
+      print(data);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
   void getLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.low);
-    print(position);
+    Location location = Location();
+    await location.getCurrentLocation();
+    // ⬆ we need to wait for line 20 (add await keyword) to complete before we use it, so we need to make the function we're waiting for (getCurrentLocation) a Future fn
+    print("LATITUDE: ${location.latitude}");
+    print(location.longitude);
   }
 
   @override
