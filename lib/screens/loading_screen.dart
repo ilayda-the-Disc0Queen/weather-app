@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../services/location.dart';
 import 'package:clima/services/networking.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -47,7 +48,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
     // build gets called everytime something gets changed so better to put
     // get location in init as it uses less resources/ phone battery cos its
     // not called over and over again!
-    return Scaffold();
+    return Scaffold(
+      body: Center(
+        child: SpinKitWanderingCubes(
+          color: Colors.white,
+          size: 70.0,
+          duration: Duration(milliseconds: 1800),
+        ),
+      ),
+    );
   }
 }
 
