@@ -30,24 +30,20 @@ class _LoadingScreenState extends State<LoadingScreen> {
     Location location = Location();
 
     await location.getCurrentLocation();
-    // ⬆ we need to wait for line above (add await keyword) to complete before we use it, so we need to make the function we're waiting for (getCurrentLocation) a Future fn
-    latitude = location.latitude;
-    longitude = location.longitude;
     NetworkHelper networkHelper = NetworkHelper(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey');
+        'https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
 
     var weatherData = await networkHelper.getData();
     // to use this weather data in other parts of the app we need to do the following
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LocationScreen();
+      return LocationScreen(
+        locationWeather: weatherData,
+      );
     }));
   }
 
   @override
   Widget build(BuildContext context) {
-    // build gets called everytime something gets changed so better to put
-    // get location in init as it uses less resources/ phone battery cos its
-    // not called over and over again!
     return Scaffold(
       body: Center(
         child: SpinKitWanderingCubes(
@@ -59,7 +55,3 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
 }
-
-// double temperature = decodedData['main']['temp'];
-// int condition = decodedData['weather'][0]['id'];
-// String cityName = decodedData['name'];
