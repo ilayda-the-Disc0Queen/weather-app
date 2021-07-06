@@ -24,13 +24,18 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void updateUI(dynamic weatherData) {
-    double originalTemp = weatherData['main']['temp'];
-    temperature = originalTemp.toInt();
-    var condition = weatherData['weather'][0]['id'];
-    cityName = weatherData['name'];
-    weatherIcon = weather.getWeatherIcon(condition);
-    weatherMessage = weather.getMessage(temperature);
-    print(cityName);
+    // because the build method in our State depends on the information below
+    // like temperature and cityName, any time there is a change to these we
+    // need to update what's being displayed to the user and so we have to wrap
+    // them in a setState!
+    setState(() {
+      double originalTemp = weatherData['main']['temp'];
+      temperature = originalTemp.toInt();
+      var condition = weatherData['weather'][0]['id'];
+      cityName = weatherData['name'];
+      weatherIcon = weather.getWeatherIcon(condition);
+      weatherMessage = weather.getMessage(temperature);
+    });
   }
 
   @override
