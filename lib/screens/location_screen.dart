@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'package:clima/services/weather.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({this.locationWeather});
@@ -9,8 +10,10 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  WeatherModel weather = WeatherModel();
   int temperature;
-  int condition;
+  String weatherMessage;
+  String weatherIcon;
   String cityName;
   dynamic weatherData;
 
@@ -22,10 +25,11 @@ class _LocationScreenState extends State<LocationScreen> {
 
   void updateUI(dynamic weatherData) {
     double originalTemp = weatherData['main']['temp'];
-    // print(originalTemp);
     temperature = originalTemp.toInt();
-    condition = weatherData['weather'][0]['id'];
+    var condition = weatherData['weather'][0]['id'];
     cityName = weatherData['name'];
+    weatherIcon = weather.getWeatherIcon(condition);
+    weatherMessage = weather.getMessage(temperature);
     print(cityName);
   }
 
@@ -75,7 +79,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       style: kTempTextStyle,
                     ),
                     Text(
-                      '☀️',
+                      weatherIcon,
                       style: kConditionTextStyle,
                     ),
                   ],
@@ -84,7 +88,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "It's 🍦 time in $cityName!",
+                  "$weatherMessage in $cityName!",
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),

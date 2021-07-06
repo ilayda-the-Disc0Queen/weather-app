@@ -15,7 +15,7 @@ class WeatherModel {
     } else if (condition <= 804) {
       return '☁️';
     } else {
-      return '🤷‍';
+      return '🤷🏽‍️‍';
     }
   }
 
