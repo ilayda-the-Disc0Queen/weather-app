@@ -5,8 +5,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 class WeatherModel {
+  String apiKey = dotenv.env['OPEN_WEATHER_API_KEY'];
+
+  Future<dynamic> getCityWeather(String cityName) async {
+    NetworkHelper networkHelper = NetworkHelper(
+        '$openWeatherMapURL?q=$cityName&appid=$apiKey&units=metric');
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
+
   Future<dynamic> getLocationWeather() async {
-    String apiKey = dotenv.env['OPEN_WEATHER_API_KEY'];
     Location location = Location();
 
     await location.getCurrentLocation();
