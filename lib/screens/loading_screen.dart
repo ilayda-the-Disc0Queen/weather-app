@@ -24,8 +24,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getLocationData() async {
-    WeatherModel weatherModel = WeatherModel();
-    var weatherData = weatherModel.getLocationWeather();
+    // WeatherModel weatherModel = WeatherModel(); instead of writing all this you can instansiate it inline 👇🏽
+    var weatherData = await WeatherModel().getLocationWeather();
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return LocationScreen(
         locationWeather: weatherData,

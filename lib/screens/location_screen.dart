@@ -28,6 +28,13 @@ class _LocationScreenState extends State<LocationScreen> {
     // like temperature and cityName, any time there is a change to these we
     // need to update what's being displayed to the user and so we have to wrap
     // them in a setState!
+    if (weatherData == null) {
+      temperature = 0;
+      weatherMessage = "Can't fetch weather info";
+      weatherIcon = 'Error';
+      cityName = '';
+      return; // means it doesn't go on and try the stuff in the setState below
+    }
     setState(() {
       double originalTemp = weatherData['main']['temp'];
       temperature = originalTemp.toInt();
@@ -60,7 +67,11 @@ class _LocationScreenState extends State<LocationScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var weatherData = await weather.getLocationWeather();
+                      // we have to have values to return before we updateUI!
+                      updateUI(weatherData);
+                    },
                     child: Icon(
                       Icons.near_me,
                       size: 50.0,
